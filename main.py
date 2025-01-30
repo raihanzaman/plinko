@@ -42,3 +42,13 @@ for row in range(2, ROWS):  # Start from row 2 to exclude the top peg
         x = WIDTH // 2 + (col - row / 2) * PEG_SPACING
         y = (row * PEG_SPACING + PEG_SPACING // 2 )
         pegs.append((x, y))
+
+# Game loop
+clock = pygame.time.Clock()
+running = True
+
+while running:
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
