@@ -10,6 +10,12 @@ WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Plinko Game")
 
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+
 # Peg and ball properties
 PEG_RADIUS = 5
 BALL_RADIUS = 8
@@ -48,7 +54,17 @@ clock = pygame.time.Clock()
 running = True
 
 while running:
+    screen.fill(WHITE)
+    
     # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    
+    # Draw pegs
+    for peg in pegs:
+        pygame.draw.circle(screen, BLUE, peg, PEG_RADIUS)
+    
+    # Update display
+    pygame.display.flip()
+    clock.tick(60)
