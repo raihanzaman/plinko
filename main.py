@@ -66,7 +66,12 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Check if the button is clicked
+            if drop_button.collidepoint(event.pos):
+                # Add a new ball at the center
+                balls.append(Ball(WIDTH // 2, HEIGHT // 50 + 50))
+    
     # Draw the drop button
     pygame.draw.rect(screen, BLACK, drop_button)
     font = pygame.font.SysFont(None, 36)
@@ -76,6 +81,8 @@ while running:
     # Update and draw balls
     for ball in balls:
         ball.update()
+        # Draw the ball
+        pygame.draw.circle(screen, RED, (int(ball.x), int(ball.y)), BALL_RADIUS)
 
     # Draw pegs
     for peg in pegs:
