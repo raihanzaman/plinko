@@ -56,6 +56,9 @@ balls = []
 clock = pygame.time.Clock()
 running = True
 
+# Define the drop button
+drop_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT // 50, 100, 50)
+
 while running:
     screen.fill(WHITE)
     
@@ -63,6 +66,12 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    # Draw the drop button
+    pygame.draw.rect(screen, BLACK, drop_button)
+    font = pygame.font.SysFont(None, 36)
+    text = font.render("Drop", True, WHITE)
+    screen.blit(text, (drop_button.x + (drop_button.width - text.get_width()) // 2, drop_button.y + (drop_button.height - text.get_height()) // 2))
 
     # Update and draw balls
     for ball in balls:
