@@ -49,6 +49,9 @@ for row in range(2, ROWS):  # Start from row 2 to exclude the top peg
         y = (row * PEG_SPACING + PEG_SPACING // 2 )
         pegs.append((x, y))
 
+# Balls list
+balls = []
+
 # Game loop
 clock = pygame.time.Clock()
 running = True
@@ -60,7 +63,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
+
+    # Update and draw balls
+    for ball in balls:
+        ball.update()
+
     # Draw pegs
     for peg in pegs:
         pygame.draw.circle(screen, BLUE, peg, PEG_RADIUS)
