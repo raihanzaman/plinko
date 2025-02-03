@@ -81,6 +81,16 @@ while running:
     # Update and draw balls
     for ball in balls:
         ball.update()
+        # Collision with pegs
+        for peg in pegs:
+            dx = peg[0] - ball.x
+            dy = peg[1] - ball.y
+            distance = math.sqrt(dx**2 + dy**2)
+            if distance < PEG_RADIUS + BALL_RADIUS:
+                angle = math.atan2(dy, dx)
+                ball.vx = 0.5 * (ball.vx - 2 * math.cos(angle))
+                ball.vy = -0.8 * abs(ball.vy - 2 * math.sin(angle))
+
         # Draw the ball
         pygame.draw.circle(screen, RED, (int(ball.x), int(ball.y)), BALL_RADIUS)
 
