@@ -113,6 +113,15 @@ while running:
         font = pygame.font.SysFont(None, 24)
         text = font.render(str(i + 1), True, BLACK)
         screen.blit(text, (100 + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
+        
+        # Check for ball collision with slots
+        for ball in balls:
+            if slot_rect.collidepoint(ball.x, ball.y):
+                slot_number = i + 1
+                print(f"Ball hit slot number: {slot_number}")
+                # Display the slot number on the screen
+                slot_texts.append(f"Slot: {slot_number}")
+                balls.remove(ball)  # Remove the ball if it falls into the slot    
     
     # Update display
     pygame.display.flip()
