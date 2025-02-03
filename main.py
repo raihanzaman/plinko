@@ -25,6 +25,11 @@ ROWS = 14
 COLS = ROWS - 1
 PEG_SPACING = 40
 
+# Bottom slots
+NUM_SLOTS = ROWS + 1
+SLOT_WIDTH = (WIDTH - 200) // NUM_SLOTS
+slot_texts = []
+
 # Gravity
 GRAVITY = 1
 
@@ -81,6 +86,7 @@ while running:
     # Update and draw balls
     for ball in balls:
         ball.update()
+
         # Collision with pegs
         for peg in pegs:
             dx = peg[0] - ball.x
@@ -97,6 +103,16 @@ while running:
     # Draw pegs
     for peg in pegs:
         pygame.draw.circle(screen, BLUE, peg, PEG_RADIUS)
+
+    # Draw bottom slots and check for ball collisions
+    for i in range(NUM_SLOTS):
+        slot_rect = pygame.Rect(100 + i * SLOT_WIDTH, HEIGHT - 40, SLOT_WIDTH, 30)
+        pygame.draw.rect(screen, BLACK, slot_rect, 2)
+        
+        # Number the slots
+        font = pygame.font.SysFont(None, 24)
+        text = font.render(str(i + 1), True, BLACK)
+        screen.blit(text, (100 + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
     
     # Update display
     pygame.display.flip()
