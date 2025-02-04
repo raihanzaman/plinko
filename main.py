@@ -123,6 +123,14 @@ while running:
                 slot_texts.append(f"Slot: {slot_number}")
                 balls.remove(ball)  # Remove the ball if it falls into the slot    
     
+        # Display the 10 most recent slot numbers on the screen
+        y_offset = 10
+        recent_texts = slot_texts[-10:][::-1]  # Get the 10 most recent drops and reverse the order
+        for text in recent_texts:
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (10, y_offset))
+            y_offset += 30
+    
     # Update display
     pygame.display.flip()
     clock.tick(60)
