@@ -130,7 +130,33 @@ while running:
             rendered_text = font.render(text, True, BLACK)
             screen.blit(rendered_text, (10, y_offset))
             y_offset += 30
-    
+
+        # Graph of slots hit
+        slot_counts = [0] * NUM_SLOTS
+        for text in slot_texts:
+            slot_number = int(text.split(": ")[1])
+            slot_counts[slot_number - 1] += 1
+
+        # Graph of slots hit in the top right corner
+        max_count = max(slot_counts) if max(slot_counts) > 0 else 1
+        graph_height = 50
+        graph_width = 50
+        graph_x = 600
+        graph_y = 20
+
+        # Draw the bars
+        for i, count in enumerate(slot_counts):
+            bar_height = int((count / max_count) * graph_height)
+            bar_rect = pygame.Rect(graph_x + i * 10, graph_y + graph_height - bar_height, 10, bar_height)
+            pygame.draw.rect(screen, BLUE, bar_rect)
+
+        # Draw the x-axis and y-axis labels
+        font = pygame.font.SysFont(None, 24)
+        x_label = font.render("Slots", True, BLACK)
+        y_label = font.render("Hits", True, BLACK)
+        screen.blit(x_label, (graph_x + graph_width // 2 - x_label.get_width() // 2, graph_y + graph_height + 10))
+        screen.blit(y_label, (graph_x - 40, graph_y + graph_height // 2 - y_label.get_height() // 2))
+
     # Update display
     pygame.display.flip()
     clock.tick(60)
