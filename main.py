@@ -157,6 +157,19 @@ while running:
         screen.blit(x_label, (graph_x + graph_width // 2 - x_label.get_width() // 2, graph_y + graph_height + 10))
         screen.blit(y_label, (graph_x - 40, graph_y + graph_height // 2 - y_label.get_height() // 2))
 
+    # Define the quit button
+    quit_button = pygame.Rect(WIDTH - 150, HEIGHT // 3 - 80, 100, 50)
+
+    # Draw the quit button
+    pygame.draw.rect(screen, BLACK, quit_button)
+    text = font.render("Quit", True, WHITE)
+    screen.blit(text, (quit_button.x + (quit_button.width - text.get_width()) // 2, quit_button.y + (quit_button.height - text.get_height()) // 2))
+
+    # Check if the quit button is clicked
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if quit_button.collidepoint(event.pos):
+            running = False
+
     # Update display
     pygame.display.flip()
     clock.tick(60)
