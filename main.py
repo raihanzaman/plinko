@@ -109,9 +109,10 @@ while running:
         slot_rect = pygame.Rect(100 + i * SLOT_WIDTH, HEIGHT - 40, SLOT_WIDTH, 30)
         pygame.draw.rect(screen, BLACK, slot_rect, 2)
         
-        # Number the slots
-        font = pygame.font.SysFont(None, 24)
-        text = font.render(str(i + 1), True, BLACK)
+        # Number the slots and display values
+        values = [10, 2, 1.5, 1.25, 1, 0.5, 0.2, 0.2, 0.2, 0.5, 1, 1.25, 1.5, 2, 10]
+        font = pygame.font.SysFont(None, 20)
+        text = font.render(f"{values[i]}x", True, BLACK)
         screen.blit(text, (100 + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
         
         # Check for ball collision with slots
@@ -127,9 +128,11 @@ while running:
         y_offset = 10
         recent_texts = slot_texts[-10:][::-1]  # Get the 10 most recent drops and reverse the order
         for text in recent_texts:
-            rendered_text = font.render(text, True, BLACK)
+            slot_number = int(text.split(": ")[1])
+            value = values[slot_number - 1]
+            rendered_text = font.render(f"{value}x", True, BLACK)
             screen.blit(rendered_text, (10, y_offset))
-            y_offset += 30
+            y_offset += 20
 
         # Graph of slots hit
         slot_counts = [0] * NUM_SLOTS
