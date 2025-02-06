@@ -76,9 +76,10 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Check if the button is clicked
-            if drop_button.collidepoint(event.pos):
-                # Add a new ball at the center
+            if drop_button.collidepoint(event.pos) & (MONEY >= 5):
+                # Add a new ball at the center, and lose money
                 balls.append(Ball(WIDTH // 2, HEIGHT // 50 + 50))
+                MONEY -= 5
     
     # Draw the drop button
     pygame.draw.rect(screen, BLACK, drop_button)
@@ -122,10 +123,10 @@ while running:
         for ball in balls:
             if slot_rect.collidepoint(ball.x, ball.y):
                 slot_number = i + 1
-                print(f"Ball hit slot number: {slot_number}")
                 # Display the slot number on the screen
                 slot_texts.append(f"Slot: {slot_number}")
-                balls.remove(ball)  # Remove the ball if it falls into the slot    
+                balls.remove(ball)  # Remove the ball if it falls into the slot 
+                MONEY += 5 * values[i]
     
         # Display the 10 most recent slot numbers on the screen
         y_offset = 10
@@ -137,15 +138,8 @@ while running:
             screen.blit(rendered_text, (10, y_offset))
             y_offset += 20
 
-        # Calculate the total money won
-        total_money = MONEY - len(slot_texts)
-        for text in slot_texts:
-            slot_number = int(text.split(": ")[1])
-            value = values[slot_number - 1]
-            total_money += value
-
         # Display the total money on the screen
-        money_text = font.render(f"Money: ${total_money:.2f}", True, BLACK)
+        money_text = font.render(f"Money: ${MONEY:.2f}", True, BLACK)
         screen.blit(money_text, (10, HEIGHT - 60))
         
         # Graph of slots hit
