@@ -33,6 +33,9 @@ slot_texts = []
 # Gravity
 GRAVITY = 1
 
+# Money
+MONEY = 100
+
 # Ball class
 class Ball:
     def __init__(self, x, y):
@@ -134,6 +137,17 @@ while running:
             screen.blit(rendered_text, (10, y_offset))
             y_offset += 20
 
+        # Calculate the total money won
+        total_money = MONEY - len(slot_texts)
+        for text in slot_texts:
+            slot_number = int(text.split(": ")[1])
+            value = values[slot_number - 1]
+            total_money += value
+
+        # Display the total money on the screen
+        money_text = font.render(f"Money: ${total_money:.2f}", True, BLACK)
+        screen.blit(money_text, (10, HEIGHT - 60))
+        
         # Graph of slots hit
         slot_counts = [0] * NUM_SLOTS
         for text in slot_texts:
