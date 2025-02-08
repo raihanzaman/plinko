@@ -25,8 +25,8 @@ SLOT_WIDTH = (WIDTH - 50) // NUM_SLOTS
 slot_texts = []
 
 GRAVITY = 1
-
-MONEY = 100
+now = 0
+MONEY = 100000
 
 class Ball:
     def __init__(self, x, y):
@@ -121,16 +121,16 @@ while running:
         if 'toggle_graph' not in globals():
             toggle_graph = False
 
-        pygame.draw.rect(screen, BLACK, toggle_button)
-        toggle_text = font.render("Toggle Graph", True, WHITE)
-        screen.blit(toggle_text, (toggle_button.x + (toggle_button.width - toggle_text.get_width()) // 2, toggle_button.y + (toggle_button.height - toggle_text.get_height()) // 2))
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if toggle_button.collidepoint(event.pos):
-                if toggle_graph  == False:
-                    toggle_graph = True
-                else:
-                    toggle_graph = False
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_g]:
+            cooldown = 200
+            if toggle_graph  == False and now + cooldown < pygame.time.get_ticks():
+                toggle_graph = True
+                now = pygame.time.get_ticks()
+            elif toggle_graph == True and now + cooldown < pygame.time.get_ticks():
+                toggle_graph = False
+                cooldown = 0
+                now = pygame.time.get_ticks()
 
         if toggle_graph:
             max_count = max(slot_counts) if max(slot_counts) > 0 else 1
@@ -158,6 +158,9 @@ while running:
     if event.type == pygame.MOUSEBUTTONDOWN:
         if quit_button.collidepoint(event.pos):
             running = False
+
+    tick_text = font.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}", True, BLACK)
+    screen.blit(tick_text, (WIDTH - 150, HEIGHT - 60))
 
     pygame.display.flip()
     clock.tick(60)
