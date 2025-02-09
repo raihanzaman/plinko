@@ -4,7 +4,7 @@ import math
 
 pygame.init()
 
-WIDTH, HEIGHT = 800, 700
+WIDTH, HEIGHT = 1000, 700
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Plinko Game")
 
@@ -20,13 +20,15 @@ ROWS = 14
 COLS = ROWS - 1
 PEG_SPACING = 50
 
-NUM_SLOTS = ROWS + 1
-SLOT_WIDTH = (WIDTH - 50) // NUM_SLOTS
+NUM_SLOTS = ROWS - 1
+SLOT_WIDTH = PEG_SPACING
+GAP = (WIDTH - NUM_SLOTS * SLOT_WIDTH) // 2
 slot_texts = []
+toggle_graph = False
 
 GRAVITY = 1
 now = 0
-MONEY = 100000
+MONEY = 10000
 
 class Ball:
     def __init__(self, x, y):
@@ -85,13 +87,13 @@ while running:
         pygame.draw.circle(screen, BLUE, peg, PEG_RADIUS)
 
     for i in range(NUM_SLOTS):
-        slot_rect = pygame.Rect(25+ i * SLOT_WIDTH, HEIGHT - 40, SLOT_WIDTH, 30)
+        slot_rect = pygame.Rect(GAP + i * SLOT_WIDTH, HEIGHT - 40, SLOT_WIDTH, 30)
         pygame.draw.rect(screen, BLACK, slot_rect, 2)
 
-        values = [10, 2, 1.5, 1.25, 1, 0.5, 0.2, 0.2, 0.2, 0.5, 1, 1.25, 1.5, 2, 10]
+        values = [35, 9, 4, 2, 0.5, 0.2, 0.2, 0.2, 0.5, 2, 4, 9, 35]
         font = pygame.font.SysFont(None, 20)
         text = font.render(f"{values[i]}x", True, BLACK)
-        screen.blit(text, (25 + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
+        screen.blit(text, (GAP + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
 
         for ball in balls:
             if slot_rect.collidepoint(ball.x, ball.y):
@@ -117,10 +119,6 @@ while running:
             slot_number = int(text.split(": ")[1])
             slot_counts[slot_number - 1] += 1
 
-        toggle_button = pygame.Rect(WIDTH - 150, HEIGHT // 3 - 125, 100, 50)
-        if 'toggle_graph' not in globals():
-            toggle_graph = False
-
         keys = pygame.key.get_pressed()
         if keys[pygame.K_g]:
             cooldown = 200
@@ -136,7 +134,7 @@ while running:
             max_count = max(slot_counts) if max(slot_counts) > 0 else 1
             graph_height = 50
             graph_width = 50
-            graph_x = 600
+            graph_x = WIDTH - 200
             graph_y = 20
 
             for i, count in enumerate(slot_counts):
