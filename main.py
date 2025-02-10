@@ -40,6 +40,7 @@ toggle_graph = False
 GRAVITY = 1
 now = 0
 MONEY = 10000
+BET = 10
 
 class Ball:
     def __init__(self, x, y):
@@ -66,6 +67,7 @@ clock = pygame.time.Clock()
 running = True
 
 drop_button = pygame.Rect(100, HEIGHT - 100, 300, 50)
+bet_increase = pygame.Rect(100, 200, 300, 50)
 
 while running:
     screen.fill(BLUE1)
@@ -75,13 +77,20 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if drop_button.collidepoint(event.pos) & (MONEY >= 5):
                 balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
-                MONEY -= 5
+                MONEY -= BET
+            elif bet_increase.collidepoint(event.pos):
+                BET += 2
+
 
     pygame.draw.rect(screen, GREEN1, drop_button, border_radius=10)
-    font = pygame.font.SysFont('helvetica', 18)
     font = pygame.font.SysFont('helvetica', 18, bold=True)
     text = font.render("Drop Ball", True, BLACK)
     screen.blit(text, (drop_button.x + (drop_button.width - text.get_width()) // 2, drop_button.y + (drop_button.height - text.get_height()) // 2))
+
+    pygame.draw.rect(screen, GREEN1, bet_increase, border_radius=10)
+    font = pygame.font.SysFont('helvetica', 18, bold=True)
+    text = font.render("INCREASE BET BY 2", True, BLACK)
+    screen.blit(text, (bet_increase.x + (bet_increase.width - text.get_width()) // 2, bet_increase.y + (bet_increase.height - text.get_height()) // 2))
 
     for ball in balls:
         ball.update()
@@ -131,8 +140,9 @@ while running:
             screen.blit(rendered_text, (10, y_offset))
             y_offset += 20
 
+        font = pygame.font.SysFont('helvetica', 18, bold=True)
         money_text = font.render(f"Money: ${MONEY:.2f}", True, WHITE)
-        screen.blit(money_text, (10, HEIGHT - 60))
+        screen.blit(money_text, (20, 30))
 
         slot_counts = [0] * NUM_SLOTS
         for text in slot_texts:
