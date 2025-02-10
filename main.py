@@ -4,7 +4,7 @@ import math
 
 pygame.init()
 
-WIDTH, HEIGHT = 1000, 700
+WIDTH, HEIGHT = 1200, 700
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Plinko Game")
 
@@ -12,6 +12,10 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+
+BLUE1 = (16, 23, 38)
+GREEN1 = (33, 197, 93)
 
 PEG_RADIUS = 5
 BALL_RADIUS = 8
@@ -20,6 +24,7 @@ ROWS = 14
 COLS = ROWS - 1
 PEG_SPACING = 50
 
+SIDE = 200
 NUM_SLOTS = ROWS - 1
 SLOT_WIDTH = PEG_SPACING
 GAP = (WIDTH - NUM_SLOTS * SLOT_WIDTH) // 2
@@ -45,7 +50,7 @@ class Ball:
 pegs = []
 for row in range(2, ROWS): 
     for col in range(row+1):
-        x = WIDTH // 2 + (col - row / 2) * PEG_SPACING
+        x = WIDTH // 2 + (col - row / 2) * PEG_SPACING + SIDE
         y = (row * PEG_SPACING + PEG_SPACING // 2) - 40
         pegs.append((x, y))
 
@@ -54,21 +59,21 @@ balls = []
 clock = pygame.time.Clock()
 running = True
 
-drop_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT // 50, 100, 50)
+drop_button = pygame.Rect(WIDTH // 2, HEIGHT // 50, 400, 50)
 
 while running:
-    screen.fill(WHITE)
+    screen.fill(BLUE1)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if drop_button.collidepoint(event.pos) & (MONEY >= 5):
-                balls.append(Ball(WIDTH // 2, HEIGHT // 50 + 10))
+                balls.append(Ball(WIDTH // 2 + SIDE, HEIGHT // 50 + 10))
                 MONEY -= 5
 
-    pygame.draw.rect(screen, BLACK, drop_button)
-    font = pygame.font.SysFont(None, 36)
-    text = font.render("Drop", True, WHITE)
+    pygame.draw.rect(screen, GREEN1, drop_button, border_radius=10)
+    font = pygame.font.SysFont('helvetica', 18)
+    text = font.render("Drop Ball", True, BLACK)
     screen.blit(text, (drop_button.x + (drop_button.width - text.get_width()) // 2, drop_button.y + (drop_button.height - text.get_height()) // 2))
 
     for ball in balls:
@@ -84,16 +89,16 @@ while running:
         pygame.draw.circle(screen, RED, (int(ball.x), int(ball.y)), BALL_RADIUS)
 
     for peg in pegs:
-        pygame.draw.circle(screen, BLUE, peg, PEG_RADIUS)
+        pygame.draw.circle(screen, WHITE, peg, PEG_RADIUS)
 
     for i in range(NUM_SLOTS):
-        slot_rect = pygame.Rect(GAP + i * SLOT_WIDTH, HEIGHT - 40, SLOT_WIDTH, 30)
-        pygame.draw.rect(screen, BLACK, slot_rect, 2)
+        slot_rect = pygame.Rect(SIDE + GAP + i * SLOT_WIDTH, HEIGHT - 40, SLOT_WIDTH, 30)
+        pygame.draw.rect(screen, WHITE, slot_rect, 2)
 
         values = [35, 9, 4, 2, 0.5, 0.2, 0.2, 0.2, 0.5, 2, 4, 9, 35]
         font = pygame.font.SysFont(None, 20)
-        text = font.render(f"{values[i]}x", True, BLACK)
-        screen.blit(text, (GAP + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
+        text = font.render(f"{values[i]}x", True, WHITE)
+        screen.blit(text, (SIDE + GAP + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
 
         for ball in balls:
             if slot_rect.collidepoint(ball.x, ball.y):
@@ -107,11 +112,11 @@ while running:
         for text in recent_texts:
             slot_number = int(text.split(": ")[1])
             value = values[slot_number - 1]
-            rendered_text = font.render(f"{value}x", True, BLACK)
+            rendered_text = font.render(f"{value}x", True, WHITE)
             screen.blit(rendered_text, (10, y_offset))
             y_offset += 20
 
-        money_text = font.render(f"Money: ${MONEY:.2f}", True, BLACK)
+        money_text = font.render(f"Money: ${MONEY:.2f}", True, WHITE)
         screen.blit(money_text, (10, HEIGHT - 60))
 
         slot_counts = [0] * NUM_SLOTS
@@ -140,24 +145,24 @@ while running:
             for i, count in enumerate(slot_counts):
                 bar_height = int((count / max_count) * graph_height)
                 bar_rect = pygame.Rect(graph_x + i * 10, graph_y + graph_height - bar_height, 10, bar_height)
-                pygame.draw.rect(screen, BLUE, bar_rect)
+                pygame.draw.rect(screen, GREEN, bar_rect)
 
-            x_label = font.render("Slots", True, BLACK)
-            y_label = font.render("Hits", True, BLACK)
+            x_label = font.render("Slots", True, WHITE)
+            y_label = font.render("Hits", True, WHITE)
             screen.blit(x_label, (graph_x + graph_width // 2 - x_label.get_width() // 2, graph_y + graph_height + 10))
             screen.blit(y_label, (graph_x - 40, graph_y + graph_height // 2 - y_label.get_height() // 2))
 
     quit_button = pygame.Rect(WIDTH - 150, HEIGHT // 3 - 80, 100, 50)
 
-    pygame.draw.rect(screen, BLACK, quit_button)
-    text = font.render("Quit", True, WHITE)
+    pygame.draw.rect(screen, WHITE, quit_button)
+    text = font.render("Quit", True, BLACK)
     screen.blit(text, (quit_button.x + (quit_button.width - text.get_width()) // 2, quit_button.y + (quit_button.height - text.get_height()) // 2))
 
     if event.type == pygame.MOUSEBUTTONDOWN:
         if quit_button.collidepoint(event.pos):
             running = False
 
-    tick_text = font.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}", True, BLACK)
+    tick_text = font.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}", True, WHITE)
     screen.blit(tick_text, (WIDTH - 150, HEIGHT - 60))
 
     pygame.display.flip()
