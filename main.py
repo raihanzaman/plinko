@@ -65,7 +65,7 @@ balls = []
 clock = pygame.time.Clock()
 running = True
 
-drop_button = pygame.Rect(WIDTH // 2, HEIGHT // 50, 400, 50)
+drop_button = pygame.Rect(100, HEIGHT - 100, 300, 50)
 
 while running:
     screen.fill(BLUE1)
@@ -79,6 +79,7 @@ while running:
 
     pygame.draw.rect(screen, GREEN1, drop_button, border_radius=10)
     font = pygame.font.SysFont('helvetica', 18)
+    font = pygame.font.SysFont('helvetica', 18, bold=True)
     text = font.render("Drop Ball", True, BLACK)
     screen.blit(text, (drop_button.x + (drop_button.width - text.get_width()) // 2, drop_button.y + (drop_button.height - text.get_height()) // 2))
 
