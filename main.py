@@ -32,7 +32,7 @@ PEG_SPACING = 50
 
 SIDE = 200
 NUM_SLOTS = ROWS - 1
-SLOT_WIDTH = PEG_SPACING
+SLOT_WIDTH = PEG_SPACING - 15
 GAP = (WIDTH - NUM_SLOTS * SLOT_WIDTH) // 2
 slot_texts = []
 toggle_graph = False
@@ -57,7 +57,7 @@ pegs = []
 for row in range(2, ROWS): 
     for col in range(row+1):
         x = WIDTH // 2 + (col - row / 2) * PEG_SPACING + SIDE
-        y = (row * PEG_SPACING + PEG_SPACING // 2) - 40
+        y = (row * PEG_SPACING + PEG_SPACING // 2) - 60
         pegs.append((x, y))
 
 balls = []
@@ -74,7 +74,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if drop_button.collidepoint(event.pos) & (MONEY >= 5):
-                balls.append(Ball(WIDTH // 2 + SIDE, HEIGHT // 50 + 10))
+                balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
                 MONEY -= 5
 
     pygame.draw.rect(screen, GREEN1, drop_button, border_radius=10)
@@ -99,13 +99,21 @@ while running:
         pygame.draw.circle(screen, WHITE, peg, PEG_RADIUS)
 
     for i in range(NUM_SLOTS):
-        slot_rect = pygame.Rect(SIDE + GAP + i * SLOT_WIDTH, HEIGHT - 40, SLOT_WIDTH, 30)
-        pygame.draw.rect(screen, WHITE, slot_rect, 2)
-
+        slot_rect = pygame.Rect(SIDE + GAP - 90 + i * PEG_SPACING, HEIGHT - 50, SLOT_WIDTH, 35)
         values = [35, 9, 4, 2, 0.5, 0.2, 0.2, 0.2, 0.5, 2, 4, 9, 35]
+        color_map = {
+            35: COLOR1,
+            9: COLOR2,
+            4: COLOR3,
+            2: COLOR4,
+            0.5: COLOR5,
+            0.2: COLOR6
+        }
+        slot_color = color_map.get(values[i], WHITE)
+        pygame.draw.rect(screen, slot_color, slot_rect, border_radius=10)
         font = pygame.font.SysFont(None, 20)
-        text = font.render(f"{values[i]}x", True, WHITE)
-        screen.blit(text, (SIDE + GAP + i * SLOT_WIDTH + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 30))
+        text = font.render(f"{values[i]}x", True, BLACK)
+        screen.blit(text, (SIDE + GAP - 90 + i * PEG_SPACING + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 40))
 
         for ball in balls:
             if slot_rect.collidepoint(ball.x, ball.y):
