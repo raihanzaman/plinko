@@ -75,7 +75,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if drop_button.collidepoint(event.pos) & (MONEY >= 5):
+            if drop_button.collidepoint(event.pos) & (MONEY >= BET):
                 balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
                 MONEY -= BET
             elif bet_increase.collidepoint(event.pos):
@@ -187,8 +187,8 @@ while running:
         if quit_button.collidepoint(event.pos):
             running = False
 
-    tick_text = font.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}", True, WHITE)
-    screen.blit(tick_text, (WIDTH - 150, HEIGHT - 60))
+    tick_text = font.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}, Bet: {BET}", True, WHITE)
+    screen.blit(tick_text, (100, 100))
 
     pygame.display.flip()
     clock.tick(60)
