@@ -33,7 +33,7 @@ PEG_SPACING = 50
 SIDE = 200
 NUM_SLOTS = ROWS - 1
 SLOT_WIDTH = PEG_SPACING - 15
-GAP = (WIDTH - NUM_SLOTS * SLOT_WIDTH) // 2
+GAP = 400
 slot_texts = []
 toggle_graph = False
 
@@ -66,8 +66,8 @@ balls = []
 clock = pygame.time.Clock()
 running = True
 
-drop_button = pygame.Rect(100, HEIGHT - 100, 300, 50)
-bet_increase = pygame.Rect(100, 200, 300, 50)
+drop_button = pygame.Rect(45, 600, 300, 50)
+bet_increase = pygame.Rect(45, 200, 300, 50)
 
 while running:
     screen.fill(BLUE1)
@@ -81,6 +81,8 @@ while running:
             elif bet_increase.collidepoint(event.pos):
                 BET += 2
 
+    gap_rect = pygame.Rect(0, 0, GAP, HEIGHT)
+    pygame.draw.rect(screen, (51, 65, 84), gap_rect)
 
     pygame.draw.rect(screen, GREEN1, drop_button, border_radius=10)
     font = pygame.font.SysFont('helvetica', 18, bold=True)
