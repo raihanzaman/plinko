@@ -189,9 +189,6 @@ while running:
 
             dev = pygame.font.SysFont(None, 20)
 
-            tick_text = dev.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}", True, WHITE)
-            screen.blit(tick_text, (100, 100))
-
             max_count = max(slot_counts) if max(slot_counts) > 0 else 1
             graph_height = 50
             graph_width = 50
@@ -207,16 +204,6 @@ while running:
             y_label = dev.render("Hits", True, WHITE)
             screen.blit(x_label, (graph_x + graph_width // 2 - x_label.get_width() // 2, graph_y + graph_height + 10))
             screen.blit(y_label, (graph_x - 40, graph_y + graph_height // 2 - y_label.get_height() // 2))
-
-    quit_button = pygame.Rect(WIDTH - 150, HEIGHT // 3 - 80, 100, 50)
-
-    pygame.draw.rect(screen, WHITE, quit_button)
-    text = font.render("Quit", True, BLACK)
-    screen.blit(text, (quit_button.x + (quit_button.width - text.get_width()) // 2, quit_button.y + (quit_button.height - text.get_height()) // 2))
-
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        if quit_button.collidepoint(event.pos):
-            running = False
 
     pygame.display.flip()
     clock.tick(60)
