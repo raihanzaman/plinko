@@ -15,12 +15,10 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 
 BLUE1 = (16, 23, 38)
+BLUE2 = (71, 85, 105)
 
 GREEN1 = (33, 197, 93)
 GREEN2 = (73, 222, 128)
-drop_button_color = GREEN1
-bet_increase_color = GREEN1
-bet_decrease_color = GREEN1
 
 COLOR1 = (255, 0, 63)
 COLOR2 = (255, 47, 47)
@@ -45,7 +43,7 @@ dev_panel = False
 
 GRAVITY = 1
 now = 0
-MONEY = 10000
+MONEY = 100
 BET = 10
 
 class Ball:
@@ -72,53 +70,56 @@ balls = []
 clock = pygame.time.Clock()
 running = True
 
-drop_button = pygame.Rect(45, 600, 300, 50)
-bet_increase = pygame.Rect(45, 300, 300, 50)
-bet_decrease = pygame.Rect(45, 370, 300, 50)
-bet_amount = pygame.Rect(45, 170, 300, 50)
-money_amount = pygame.Rect(45, 100, 300, 50)
 
 while running:
     screen.fill(BLUE1)
+
+    gap_rect = pygame.Rect(0, 0, GAP, HEIGHT)
+    pygame.draw.rect(screen, (51, 65, 84), gap_rect)
+    font = pygame.font.SysFont('helvetica', 18, bold=True)
+    font2 = pygame.font.SysFont('impact', 54, bold=False, italic=True)
+    
+    drop_button = pygame.Rect(45, 600, 300, 50)
+    drop_button_color = GREEN1
+    pygame.draw.rect(screen, drop_button_color, drop_button, border_radius=10)
+    text = font.render("Drop Ball", True, BLACK)
+    screen.blit(text, (drop_button.x + (drop_button.width - text.get_width()) // 2, drop_button.y + (drop_button.height - text.get_height()) // 2))
+
+    bet_increase = pygame.Rect(45, 450, 300, 50)
+    bet_increase_color = GREEN1
+    pygame.draw.rect(screen, bet_increase_color, bet_increase, border_radius=10)
+    text = font.render("INCREASE BET BY $1", True, BLACK)
+    screen.blit(text, (bet_increase.x + (bet_increase.width - text.get_width()) // 2, bet_increase.y + (bet_increase.height - text.get_height()) // 2))
+
+    bet_decrease = pygame.Rect(45, 390, 300, 50)
+    bet_decrease_color = GREEN1
+    pygame.draw.rect(screen, bet_decrease_color, bet_decrease, border_radius=10)
+    text = font.render("DECREASE BET BY $1", True, BLACK)
+    screen.blit(text, (bet_decrease.x + (bet_decrease.width - text.get_width()) // 2, bet_decrease.y + (bet_decrease.height - text.get_height()) // 2))
+
+    bet_amount = pygame.Rect(45, 330, 300, 50)
+    pygame.draw.rect(screen, BLUE1, bet_amount, border_radius=10)
+    pygame.draw.rect(screen, BLUE2, bet_amount, width=2, border_radius=10)
+    text = font.render(f"BET AMOUNT: ${BET}", True, WHITE)
+    screen.blit(text, (bet_amount.x + (bet_amount.width - text.get_width()) // 2, bet_amount.y + (bet_amount.height - text.get_height()) // 2))
+
+    money_amount = pygame.Rect(45, 100, 300, 100)
+    pygame.draw.rect(screen, BLUE1, money_amount, border_radius=10)
+    pygame.draw.rect(screen, BLUE2, money_amount, width=2, border_radius=10)
+    text = font2.render(f"${MONEY:.2f}", True, WHITE)
+    screen.blit(text, (money_amount.x + (money_amount.width - text.get_width()) // 2, money_amount.y + (money_amount.height - text.get_height()) // 2))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if drop_button.collidepoint(event.pos) & (MONEY >= BET):
+            if drop_button.collidepoint(event.pos) & (MONEY // 1 >= BET):
                 balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
                 MONEY -= BET
-            elif bet_increase.collidepoint(event.pos) and MONEY >= BET:
-                BET += 2
-            elif bet_decrease.collidepoint(event.pos) and BET > 2:
-                BET -= 2
-
-    gap_rect = pygame.Rect(0, 0, GAP, HEIGHT)
-    pygame.draw.rect(screen, (51, 65, 84), gap_rect)
-    
-    pygame.draw.rect(screen, drop_button_color, drop_button, border_radius=10)
-    font = pygame.font.SysFont('helvetica', 18, bold=True)
-    text = font.render("Drop Ball", True, BLACK)
-    screen.blit(text, (drop_button.x + (drop_button.width - text.get_width()) // 2, drop_button.y + (drop_button.height - text.get_height()) // 2))
-
-    pygame.draw.rect(screen, bet_increase_color, bet_increase, border_radius=10)
-    font = pygame.font.SysFont('helvetica', 18, bold=True)
-    text = font.render("INCREASE BET BY 2", True, BLACK)
-    screen.blit(text, (bet_increase.x + (bet_increase.width - text.get_width()) // 2, bet_increase.y + (bet_increase.height - text.get_height()) // 2))
-
-    pygame.draw.rect(screen, bet_decrease_color, bet_decrease, border_radius=10)
-    font = pygame.font.SysFont('helvetica', 18, bold=True)
-    text = font.render("DECREASE BET BY 2", True, BLACK)
-    screen.blit(text, (bet_decrease.x + (bet_increase.width - text.get_width()) // 2, bet_decrease.y + (bet_decrease.height - text.get_height()) // 2))
-
-    pygame.draw.rect(screen, bet_decrease_color, bet_amount, border_radius=10)
-    font = pygame.font.SysFont('helvetica', 18, bold=True)
-    text = font.render(f"BET AMOUNT: ${BET}", True, BLACK)
-    screen.blit(text, (bet_amount.x + (bet_amount.width - text.get_width()) // 2, bet_amount.y + (bet_amount.height - text.get_height()) // 2))
-
-    pygame.draw.rect(screen, bet_decrease_color, money_amount, border_radius=10)
-    font = pygame.font.SysFont('helvetica', 18, bold=True)
-    text = font.render(f"MONEY AMOUNT: ${MONEY:.2f}", True, BLACK)
-    screen.blit(text, (money_amount.x + (money_amount.width - text.get_width()) // 2, money_amount.y + (money_amount.height - text.get_height()) // 2))
+            elif bet_increase.collidepoint(event.pos) and MONEY // 1 > BET:
+                BET += 1
+            elif bet_decrease.collidepoint(event.pos) and BET > 1:
+                BET -= 1
 
     for ball in balls:
         ball.update()
@@ -186,7 +187,9 @@ while running:
 
         if dev_panel:
 
-            tick_text = font.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}", True, WHITE)
+            dev = pygame.font.SysFont(None, 20)
+
+            tick_text = dev.render(f"Tick: {pygame.time.get_ticks()}, Now: {now}", True, WHITE)
             screen.blit(tick_text, (100, 100))
 
             max_count = max(slot_counts) if max(slot_counts) > 0 else 1
@@ -200,8 +203,8 @@ while running:
                 bar_rect = pygame.Rect(graph_x + i * 10, graph_y + graph_height - bar_height, 10, bar_height)
                 pygame.draw.rect(screen, GREEN, bar_rect)
 
-            x_label = font.render("Slots", True, WHITE)
-            y_label = font.render("Hits", True, WHITE)
+            x_label = dev.render("Slots", True, WHITE)
+            y_label = dev.render("Hits", True, WHITE)
             screen.blit(x_label, (graph_x + graph_width // 2 - x_label.get_width() // 2, graph_y + graph_height + 10))
             screen.blit(y_label, (graph_x - 40, graph_y + graph_height // 2 - y_label.get_height() // 2))
 
