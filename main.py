@@ -77,7 +77,7 @@ while running:
     gap_rect = pygame.Rect(0, 0, GAP, HEIGHT)
     pygame.draw.rect(screen, (51, 65, 84), gap_rect)
     font = pygame.font.SysFont('helvetica', 18, bold=True)
-    font2 = pygame.font.SysFont('impact', 54, bold=False, italic=True)
+    font1 = pygame.font.SysFont('impact', 54, bold=False, italic=True)
     
     drop_button = pygame.Rect(45, 600, 300, 50)
     drop_button_color = GREEN1
@@ -106,7 +106,7 @@ while running:
     money_amount = pygame.Rect(45, 100, 300, 100)
     pygame.draw.rect(screen, BLUE1, money_amount, border_radius=10)
     pygame.draw.rect(screen, BLUE2, money_amount, width=2, border_radius=10)
-    text = font2.render(f"${MONEY:.2f}", True, WHITE)
+    text = font1.render(f"${MONEY:.2f}", True, WHITE)
     screen.blit(text, (money_amount.x + (money_amount.width - text.get_width()) // 2, money_amount.y + (money_amount.height - text.get_height()) // 2))
 
     for event in pygame.event.get():
@@ -120,7 +120,7 @@ while running:
                 BET += 1
             elif bet_decrease.collidepoint(event.pos) and BET > 1:
                 BET -= 1
-
+    
     for ball in balls:
         ball.update()
         for peg in pegs:
@@ -149,8 +149,8 @@ while running:
         }
         slot_color = color_map.get(values[i], WHITE)
         pygame.draw.rect(screen, slot_color, slot_rect, border_radius=10)
-        font = pygame.font.SysFont(None, 20)
-        text = font.render(f"{values[i]}x", True, BLACK)
+        font2 = pygame.font.SysFont(None, 20)
+        text = font2.render(f"{values[i]}x", True, BLACK)
         screen.blit(text, (SIDE + GAP - 120 + i * PEG_SPACING + SLOT_WIDTH // 2 - text.get_width() // 2, HEIGHT - 40))
 
         for ball in balls:
@@ -160,14 +160,18 @@ while running:
                 balls.remove(ball)
                 MONEY += BET * values[i]
 
-        y_offset = 10
-        recent_texts = slot_texts[-10:][::-1] 
+        y_offset = 150
+        recent_texts = slot_texts[-5:][::-1] 
+        font2 = pygame.font.SysFont(None, 28)
         for text in recent_texts:
             slot_number = int(text.split(": ")[1])
             value = values[slot_number - 1]
-            rendered_text = font.render(f"{value}x", True, WHITE)
-            screen.blit(rendered_text, (10, y_offset))
-            y_offset += 20
+            slot_color = color_map.get(value, WHITE)
+            rendered_text = font2.render(f"{value}x", True, BLACK)
+            text_rect = pygame.Rect(WIDTH - 100, y_offset, 50, 50)
+            pygame.draw.rect(screen, slot_color, text_rect)
+            screen.blit(rendered_text, (text_rect.x + (text_rect.width - rendered_text.get_width()) // 2, text_rect.y + (text_rect.height - rendered_text.get_height()) // 2))
+            y_offset += 50
 
         slot_counts = [0] * NUM_SLOTS
         for text in slot_texts:
@@ -191,7 +195,7 @@ while running:
 
             max_count = max(slot_counts) if max(slot_counts) > 0 else 1
             graph_height = 50
-            graph_width = 50
+            graph_width = 100
             graph_x = WIDTH - 200
             graph_y = 20
 
