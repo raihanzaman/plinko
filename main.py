@@ -100,7 +100,7 @@ while running:
     money_amount = pygame.Rect(45, 100, 300, 100)
     pygame.draw.rect(screen, BLUE1, money_amount, border_radius=10)
     pygame.draw.rect(screen, BLUE2, money_amount, width=2, border_radius=10)
-    text = font1.render(f"${MONEY:.2f}", True, WHITE)
+    text = font1.render(f"${MONEY:,.2f}", True, WHITE)
     screen.blit(text, (money_amount.x + (money_amount.width - text.get_width()) // 2, money_amount.y + (money_amount.height - text.get_height()) // 2))
 
     for event in pygame.event.get():
