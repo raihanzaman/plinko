@@ -110,7 +110,7 @@ while running:
             if drop_button.collidepoint(event.pos) and MONEY >= BET:
                 balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
                 MONEY -= BET
-            elif bet_increase.collidepoint(event.pos) and MONEY > BET:
+            elif bet_increase.collidepoint(event.pos) and MONEY > BET - 0.01:
                 BET += 1
             elif bet_decrease.collidepoint(event.pos) and BET > 1:
                 BET -= 1
