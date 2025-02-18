@@ -72,12 +72,16 @@ while running:
     drop_button = pygame.Rect(45, 600, 300, 50)
     bet_increase = pygame.Rect(45, 450, 300, 50)
     bet_decrease = pygame.Rect(45, 390, 300, 50)
+    bet_amount = pygame.Rect(45, 330, 300, 50)
+    money_amount = pygame.Rect(45, 100, 300, 100)
 
     mouse_pos = pygame.mouse.get_pos()
+    keys = pygame.key.get_pressed()
 
     drop_button_color = GREEN2 if drop_button.collidepoint(mouse_pos) else GREEN1
     bet_increase_color = GREEN2 if bet_increase.collidepoint(mouse_pos) else GREEN1
     bet_decrease_color = GREEN2 if bet_decrease.collidepoint(mouse_pos) else GREEN1
+    bet_amount_color = BLUE2 if bet_amount.collidepoint(mouse_pos) else BLUE1
 
     pygame.draw.rect(screen, drop_button_color, drop_button, border_radius=10)
     text = font.render("Drop Ball", True, BLACK)
@@ -91,13 +95,11 @@ while running:
     text = font.render("DECREASE BET BY $1", True, BLACK)
     screen.blit(text, (bet_decrease.x + (bet_decrease.width - text.get_width()) // 2, bet_decrease.y + (bet_decrease.height - text.get_height()) // 2))
 
-    bet_amount = pygame.Rect(45, 330, 300, 50)
-    pygame.draw.rect(screen, BLUE1, bet_amount, border_radius=10)
+    pygame.draw.rect(screen, bet_amount_color, bet_amount, border_radius=10)
     pygame.draw.rect(screen, BLUE2, bet_amount, width=2, border_radius=10)
     text = font.render(f"BET AMOUNT: ${BET}", True, WHITE)
     screen.blit(text, (bet_amount.x + (bet_amount.width - text.get_width()) // 2, bet_amount.y + (bet_amount.height - text.get_height()) // 2))
 
-    money_amount = pygame.Rect(45, 100, 300, 100)
     pygame.draw.rect(screen, BLUE1, money_amount, border_radius=10)
     pygame.draw.rect(screen, BLUE2, money_amount, width=2, border_radius=10)
     text = font1.render(f"${MONEY:,.2f}", True, WHITE)
@@ -114,6 +116,43 @@ while running:
                 BET += 1
             elif bet_decrease.collidepoint(event.pos) and BET > 1:
                 BET -= 1
+    
+    if bet_amount.collidepoint(mouse_pos):
+        cooldown = 200
+        if len(str(BET)) < 6:
+            if keys[pygame.K_0] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_1] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 1
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_2] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 2
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_3] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 3
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_4] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 4
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_5] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 5
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_6] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 6
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_7] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 7
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_8] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 8
+                now = pygame.time.get_ticks()
+            if keys[pygame.K_9] and now + cooldown < pygame.time.get_ticks():
+                BET = BET * 10 + 9
+                now = pygame.time.get_ticks()
+        if keys[pygame.K_BACKSPACE] and now + cooldown < pygame.time.get_ticks():
+            BET = BET // 10
+            now = pygame.time.get_ticks()
 
     for ball in balls:
         ball.update()
@@ -159,7 +198,6 @@ while running:
         screen.blit(rendered_text, (text_rect.x + (text_rect.width - rendered_text.get_width()) // 2, text_rect.y + (text_rect.height - rendered_text.get_height()) // 2))
         y_offset += 50
 
-    keys = pygame.key.get_pressed()
     if keys[pygame.K_g]:
         cooldown = 200
         if not dev_panel and now + cooldown < pygame.time.get_ticks():
@@ -167,7 +205,6 @@ while running:
             now = pygame.time.get_ticks()
         elif dev_panel and now + cooldown < pygame.time.get_ticks():
             dev_panel = False
-            cooldown = 0
             now = pygame.time.get_ticks()
 
     if dev_panel:
