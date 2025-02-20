@@ -70,34 +70,40 @@ while running:
     font1 = pygame.font.SysFont('impact', 54, bold=False, italic=True)
 
     drop_button = pygame.Rect(45, 600, 300, 50)
-    bet_increase = pygame.Rect(45, 450, 300, 50)
-    bet_decrease = pygame.Rect(45, 390, 300, 50)
-    bet_amount = pygame.Rect(45, 330, 300, 50)
+    bet_half = pygame.Rect(45, 450, 300, 50)
+    bet_double = pygame.Rect(45, 390, 300, 50)
+    bet_all_in = pygame.Rect(45, 330, 300, 50)
+    bet_amount = pygame.Rect(45, 270, 300, 50)
     money_amount = pygame.Rect(45, 100, 300, 100)
 
     mouse_pos = pygame.mouse.get_pos()
     keys = pygame.key.get_pressed()
 
     drop_button_color = GREEN2 if drop_button.collidepoint(mouse_pos) else GREEN1
-    bet_increase_color = GREEN2 if bet_increase.collidepoint(mouse_pos) else GREEN1
-    bet_decrease_color = GREEN2 if bet_decrease.collidepoint(mouse_pos) else GREEN1
+    bet_half_color = GREEN2 if bet_half.collidepoint(mouse_pos) else GREEN1
+    bet_double_color = GREEN2 if bet_double.collidepoint(mouse_pos) else GREEN1
+    bet_all_in_color = GREEN2 if bet_all_in.collidepoint(mouse_pos) else GREEN1
     bet_amount_color = BLUE2 if bet_amount.collidepoint(mouse_pos) else BLUE1
 
     pygame.draw.rect(screen, drop_button_color, drop_button, border_radius=10)
     text = font.render("Drop Ball", True, BLACK)
     screen.blit(text, (drop_button.x + (drop_button.width - text.get_width()) // 2, drop_button.y + (drop_button.height - text.get_height()) // 2))
 
-    pygame.draw.rect(screen, bet_increase_color, bet_increase, border_radius=10)
-    text = font.render("INCREASE BET BY $1", True, BLACK)
-    screen.blit(text, (bet_increase.x + (bet_increase.width - text.get_width()) // 2, bet_increase.y + (bet_increase.height - text.get_height()) // 2))
+    pygame.draw.rect(screen, bet_half_color, bet_half, border_radius=10)
+    text = font.render("BET 1/2x", True, BLACK)
+    screen.blit(text, (bet_half.x + (bet_half.width - text.get_width()) // 2, bet_half.y + (bet_half.height - text.get_height()) // 2))
 
-    pygame.draw.rect(screen, bet_decrease_color, bet_decrease, border_radius=10)
-    text = font.render("DECREASE BET BY $1", True, BLACK)
-    screen.blit(text, (bet_decrease.x + (bet_decrease.width - text.get_width()) // 2, bet_decrease.y + (bet_decrease.height - text.get_height()) // 2))
+    pygame.draw.rect(screen, bet_double_color, bet_double, border_radius=10)
+    text = font.render("BET 2x", True, BLACK)
+    screen.blit(text, (bet_double.x + (bet_double.width - text.get_width()) // 2, bet_double.y + (bet_double.height - text.get_height()) // 2))
+
+    pygame.draw.rect(screen, bet_all_in_color, bet_all_in, border_radius=10)
+    text = font.render("ALL IN", True, BLACK)
+    screen.blit(text, (bet_all_in.x + (bet_all_in.width - text.get_width()) // 2, bet_all_in.y + (bet_all_in.height - text.get_height()) // 2))
 
     pygame.draw.rect(screen, bet_amount_color, bet_amount, border_radius=10)
     pygame.draw.rect(screen, BLUE2, bet_amount, width=2, border_radius=10)
-    text = font.render(f"BET AMOUNT: ${BET}", True, WHITE)
+    text = font.render(f"BET AMOUNT: ${BET:,.2f}", True, WHITE)
     screen.blit(text, (bet_amount.x + (bet_amount.width - text.get_width()) // 2, bet_amount.y + (bet_amount.height - text.get_height()) // 2))
 
     pygame.draw.rect(screen, BLUE1, money_amount, border_radius=10)
@@ -112,10 +118,12 @@ while running:
             if drop_button.collidepoint(event.pos) and MONEY >= BET:
                 balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
                 MONEY -= BET
-            elif bet_increase.collidepoint(event.pos) and MONEY > BET - 0.01:
-                BET += 1
-            elif bet_decrease.collidepoint(event.pos) and BET > 1:
-                BET -= 1
+            elif bet_half.collidepoint(event.pos) and MONEY >= BET / 2:
+                BET = max(1, BET // 2)
+            elif bet_double.collidepoint(event.pos) and MONEY >= BET * 2:
+                BET = min(MONEY, BET * 2)
+            elif bet_all_in.collidepoint(event.pos) and MONEY > 0:
+                BET = MONEY
     
     if bet_amount.collidepoint(mouse_pos):
         cooldown = 200
