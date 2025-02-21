@@ -60,7 +60,33 @@ now = 0
 clock = pygame.time.Clock()
 running = True
 
+start_screen = True
+font = pygame.font.SysFont('helvetica', 18, bold=True)
+
+while start_screen:
+        screen.fill(BLUE1)
+        title_font = pygame.font.SysFont('impact', 120, bold=False)
+        title_text = title_font.render("Plinko Game", True, WHITE)
+        screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, HEIGHT // 4))
+
+        start_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2, 300, 50)
+        pygame.draw.rect(screen, GREEN1, start_button, border_radius=10)
+        start_text = font.render("Start Game", True, BLACK)
+        screen.blit(start_text, (start_button.x + (start_button.width - start_text.get_width()) // 2, start_button.y + (start_button.height - start_text.get_height()) // 2))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                start_screen = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if start_button.collidepoint(event.pos):
+                    start_screen = False
+
+        pygame.display.flip()
+        clock.tick(60)
+
 while running:
+    
     screen.fill(BLUE1)
 
     gap_rect = pygame.Rect(0, 0, GAP, HEIGHT)
@@ -118,11 +144,11 @@ while running:
             if drop_button.collidepoint(event.pos) and MONEY >= BET:
                 balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
                 MONEY -= BET
-            elif bet_half.collidepoint(event.pos) and MONEY >= BET / 2:
-                BET = max(1, BET // 2)
-            elif bet_double.collidepoint(event.pos) and MONEY >= BET * 2:
+            elif bet_half.collidepoint(event.pos):
+                BET = max(1, BET / 2)
+            elif bet_double.collidepoint(event.pos):
                 BET = min(MONEY, BET * 2)
-            elif bet_all_in.collidepoint(event.pos) and MONEY > 0:
+            elif bet_all_in.collidepoint(event.pos):
                 BET = MONEY
     
     if bet_amount.collidepoint(mouse_pos):
