@@ -17,6 +17,7 @@ GAP = 400
 GRAVITY = 1
 MONEY = 100
 BET = 10
+LOCKED_BET = False
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -144,11 +145,12 @@ while running:
             if drop_button.collidepoint(event.pos) and MONEY >= BET:
                 balls.append(Ball(WIDTH // 2 + SIDE + 5, HEIGHT // 50 + 10))
                 MONEY -= BET
-            elif bet_half.collidepoint(event.pos):
+                LOCKED_BET = True
+            elif bet_half.collidepoint(event.pos) and not LOCKED_BET:
                 BET = max(1, BET / 2)
-            elif bet_double.collidepoint(event.pos):
+            elif bet_double.collidepoint(event.pos) and not LOCKED_BET:
                 BET = min(MONEY, BET * 2)
-            elif bet_all_in.collidepoint(event.pos):
+            elif bet_all_in.collidepoint(event.pos) and not LOCKED_BET:
                 BET = MONEY
     
     if bet_amount.collidepoint(mouse_pos):
@@ -217,6 +219,7 @@ while running:
                 slot_texts.append(f"Slot: {i + 1}")
                 balls.remove(ball)
                 MONEY += BET * values[i]
+                LOCKED_BET = False
                 pygame.draw.rect(screen, (255, 255, 0), slot_rect, border_radius=10)
 
     y_offset = 150
