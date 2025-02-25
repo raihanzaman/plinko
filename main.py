@@ -219,8 +219,10 @@ while running:
                 slot_texts.append(f"Slot: {i + 1}")
                 balls.remove(ball)
                 MONEY += BET * values[i]
-                LOCKED_BET = False
                 pygame.draw.rect(screen, (255, 255, 0), slot_rect, border_radius=10)
+
+    if balls == []:
+        LOCKED_BET = False
 
     y_offset = 150
     recent_texts = slot_texts[-5:][::-1]
